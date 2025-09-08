@@ -1005,6 +1005,9 @@ static ERL_NIF_TERM tty_init_nif(ErlNifEnv* env, int argc, const ERL_NIF_TERM ar
     debug("origOutMode: %x origInMode: %x\r\n", 
           tty->dwOriginalOutMode, tty->dwOriginalInMode);
 
+    dwInMode |= (ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT);
+    SetConsoleMode(tty->ifd, dwInMode);
+
 #endif /* __WIN32__ */
 
     enif_self(env, &tty->self);
