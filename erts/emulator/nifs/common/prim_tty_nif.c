@@ -923,24 +923,7 @@ static ERL_NIF_TERM tty_create_nif(ErlNifEnv* env, int argc, const ERL_NIF_TERM 
                               NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     }
 
-    if (GetConsoleMode(tty->ofd, &tty->dwOriginalOutMode))
-    {
-        tty->dwOutMode = ENABLE_VIRTUAL_TERMINAL_PROCESSING | tty->dwOriginalOutMode;
-        if (!SetConsoleMode(tty->ofd, tty->dwOutMode)) {
-            /* Failed to set any VT mode, can't do anything here. */
-            return make_errno_error(env, "SetConsoleModeOut");
-        }
-        tty->tty = disabled;
-    }
-
-    if (GetConsoleMode(tty->ifd, &tty->dwOriginalInMode))
-    {
-        tty->dwInMode = ENABLE_VIRTUAL_TERMINAL_INPUT | tty->dwOriginalInMode;
-        if (!SetConsoleMode(tty->ifd, tty->dwInMode)) {
-            /* Failed to set any VT mode, can't do anything here. */
-            return make_errno_error(env, "SetConsoleModeIn");
-        }
-    }
+    tty->tty = disabled;
     
 #endif
 
