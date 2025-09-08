@@ -1005,23 +1005,6 @@ static ERL_NIF_TERM tty_init_nif(ErlNifEnv* env, int argc, const ERL_NIF_TERM ar
     debug("origOutMode: %x origInMode: %x\r\n", 
           tty->dwOriginalOutMode, tty->dwOriginalInMode);
 
-    if (tty->tty == enabled) {
-        dwOutMode  |= DISABLE_NEWLINE_AUTO_RETURN;
-        dwInMode &= ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT);
-    }
-
-    if (tty->ifd != INVALID_HANDLE_VALUE && !SetConsoleMode(tty->ifd, dwInMode))
-    {
-        /* Failed to set disable echo or line input mode */
-        return make_errno_error(env, "SetConsoleModeInitIn");
-    }
-
-    
-    if (!SetConsoleMode(tty->ofd, dwOutMode)) {
-        /* If we cannot disable NEWLINE_AUTO_RETURN we continue anyway as things work */
-        ;
-    }
-
 #endif /* __WIN32__ */
 
     enif_self(env, &tty->self);
